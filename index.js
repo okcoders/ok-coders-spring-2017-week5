@@ -6,6 +6,7 @@ const port = 8088;
 const dbserver = 'mongodb://localhost/todo'
 
 var tasks = require('./routes/tasks');
+var client = require('./client');
 
 mongoose.connect(dbserver);
 var db = mongoose.connection;
@@ -18,10 +19,10 @@ db.once('open', function(){
 	console.log("Mongoose connection established.");
 });
 
-server.get('/', function(req, res, next){
-	res.send("SUCCESS");
-});
+server.get('/', client.get);
 server.get('/tasks', tasks.read);
+server.post('/tasks/:arg1', tasks.create);
+server.put('/tasks/:arg1', tasks.update);
 
 server.listen(port, function(){
 	console.log('%s listening on %s', server.name, port);
